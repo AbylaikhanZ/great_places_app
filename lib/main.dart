@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:great_places_app/providers/places_prov.dart';
+import 'package:great_places_app/screens/add_place_screen.dart';
 import 'package:great_places_app/screens/places_list_screen.dart';
 import 'package:provider/provider.dart';
 
@@ -18,6 +19,7 @@ class MyApp extends StatelessWidget {
       child: MaterialApp(
         title: 'Great Places',
         theme: ThemeData(
+            useMaterial3: true,
             primarySwatch: Colors.lime,
             colorScheme: const ColorScheme(
                 brightness: Brightness.light,
@@ -32,6 +34,9 @@ class MyApp extends StatelessWidget {
                 surface: Colors.white,
                 onSurface: Colors.black)),
         home: PlacesListScreen(),
+        routes: {
+          AddPlaceScreen.routeName: (context) => AddPlaceScreen(),
+        },
       ),
     );
   }
