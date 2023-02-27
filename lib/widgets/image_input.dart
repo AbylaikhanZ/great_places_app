@@ -8,7 +8,7 @@ import 'package:path_provider/path_provider.dart' as syspath;
 class ImageInput extends StatefulWidget {
   final Function onSelectImage;
 
-  ImageInput(this.onSelectImage);
+  const ImageInput(this.onSelectImage);
 
   @override
   State<ImageInput> createState() => _ImageInputState();
@@ -16,6 +16,7 @@ class ImageInput extends StatefulWidget {
 
 class _ImageInputState extends State<ImageInput> {
   var _storedImage = File('assets/images/placeHolder.jpeg');
+  String noImage = "noImage";
 
   Future<void> _takePicture() async {
     var imageFile = await ImagePicker().pickImage(
@@ -31,6 +32,7 @@ class _ImageInputState extends State<ImageInput> {
     final fileName = path.basename(imageFile.path);
     final savedImage = await _storedImage.copy('${appDir.path}/$fileName');
     widget.onSelectImage(savedImage);
+    noImage = "image";
   }
 
   Future<void> _pickPicture() async {
@@ -43,20 +45,30 @@ class _ImageInputState extends State<ImageInput> {
     //final fileName = path.basename((imageFile as XFile).path);
     //final savedImage = await _storedImage.copy('$appDir/$fileName');
     widget.onSelectImage(_storedImage);
+    noImage = "image";
   }
 
   @override
   Widget build(BuildContext context) {
     return Row(
       children: [
-        SizedBox(
+        Container(
           height: 200,
           width: 200,
-          child: Image.file(
-            _storedImage,
-            fit: BoxFit.cover,
-            width: double.infinity,
-          ),
+          alignment: Alignment.center,
+          decoration: BoxDecoration(
+              border: Border.all(width: 1.0, color: Colors.grey),
+              borderRadius: BorderRadius.circular(10)),
+          child: noImage == "noImage"
+              ? const Text(
+                  "No image chosen",
+                  textAlign: TextAlign.center,
+                )
+              : Image.file(
+                  _storedImage,
+                  fit: BoxFit.cover,
+                  width: double.infinity,
+                ),
         ),
         const SizedBox(
           height: 10,

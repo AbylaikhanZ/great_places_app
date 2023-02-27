@@ -8,6 +8,8 @@
 	<string>Allow access to library, please</string>
 	<key>NSCameraUsageDescription</key>
 	<string>Allow access to camera, please</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>Allow access to location services, please</string>
 	<key>CFBundleDisplayName</key>
 	<string>Great Places App</string>
 	<key>CFBundleExecutable</key>

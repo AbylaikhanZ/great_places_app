@@ -33,9 +33,9 @@ class MyApp extends StatelessWidget {
                 onBackground: Colors.white,
                 surface: Colors.white,
                 onSurface: Colors.black)),
-        home: PlacesListScreen(),
+        home: const PlacesListScreen(),
         routes: {
-          AddPlaceScreen.routeName: (context) => AddPlaceScreen(),
+          AddPlaceScreen.routeName: (context) => const AddPlaceScreen(),
         },
       ),
     );

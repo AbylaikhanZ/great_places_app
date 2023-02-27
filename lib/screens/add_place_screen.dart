@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:great_places_app/providers/places_prov.dart';
 import 'package:great_places_app/widgets/image_input.dart';
+import 'package:great_places_app/widgets/location_input.dart';
 import 'package:provider/provider.dart';
 
 class AddPlaceScreen extends StatefulWidget {
@@ -34,7 +35,7 @@ class _AddPlaceScreenState extends State<AddPlaceScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Add a New Place"),
+        title: const Text("Add a New Place"),
       ),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -47,13 +48,17 @@ class _AddPlaceScreenState extends State<AddPlaceScreen> {
             child: Column(
               children: [
                 TextField(
-                  decoration: InputDecoration(labelText: 'Title'),
+                  decoration: const InputDecoration(labelText: 'Title'),
                   controller: _titleController,
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 10,
                 ),
                 ImageInput(_selectImage),
+                const SizedBox(
+                  height: 10,
+                ),
+                const LocationInput(),
               ],
             ),
           ))),
@@ -62,8 +67,8 @@ class _AddPlaceScreenState extends State<AddPlaceScreen> {
               style: ElevatedButton.styleFrom(
                   primary: Theme.of(context).colorScheme.secondary,
                   onPrimary: Theme.of(context).colorScheme.onSecondary),
-              icon: Icon(Icons.add),
-              label: Text('Add a Place')),
+              icon: const Icon(Icons.add),
+              label: const Text('Add a Place')),
         ],
       ),
     );
