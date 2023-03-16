@@ -1,40 +1,46 @@
 import 'package:flutter/material.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:great_places_app/helpers/location_helper.dart';
 import 'package:great_places_app/screens/map_screen.dart';
 import 'package:location/location.dart';
 
 class LocationInput extends StatefulWidget {
-  const LocationInput({Key? key}) : super(key: key);
-
+  final Function onSelectPlace;
+  const LocationInput(this.onSelectPlace);
   @override
   State<LocationInput> createState() => _LocationInputState();
 }
 
 class _LocationInputState extends State<LocationInput> {
   String _previewImageURL = "No location chosen";
-  static double? userLongitude;
-  static double? userLatitude;
 
-  Future<void> _getCurrentLocation() async {
-    final userLocation = await Location().getLocation();
-    final staticMapImage = LocationHelper.generateLocationPreview(
-        latitude: userLocation.latitude, longitude: userLocation.longitude);
+  void setPreviewImage(double? lat, double? lng) {
+    final staticMapImage =
+        LocationHelper.generateLocationPreview(latitude: lat, longitude: lng);
     setState(() {
       _previewImageURL = staticMapImage;
-      userLatitude = userLocation.latitude;
-      userLongitude = userLocation.longitude;
     });
   }
 
-  Future<void> _selectOnMap() async {
-    final selectedLocation = await Navigator.of(context).push(MaterialPageRoute(
-        fullscreenDialog: true,
-        builder: ((ctx) => MapScreen(
-              isSelecting: true,
-            ))));
-    if (selectedLocation == null) {
+  Future<void> _getCurrentLocation() async {
+    try {
+      final userLocation = await Location().getLocation();
+      setPreviewImage(userLocation.latitude, userLocation.longitude);
+      widget.onSelectPlace(userLocation.latitude, userLocation.longitude);
+    } catch (error) {
       return;
     }
+  }
+
+  Future<void> _selectOnMap() async {
+    final LatLng selectedLocation =
+        await Navigator.of(context).push(MaterialPageRoute(
+            fullscreenDialog: true,
+            builder: ((ctx) => MapScreen(
+                  isSelecting: true,
+                ))));
+    setPreviewImage(selectedLocation.latitude, selectedLocation.longitude);
+    widget.onSelectPlace(selectedLocation.latitude, selectedLocation.longitude);
   }
 
   @override

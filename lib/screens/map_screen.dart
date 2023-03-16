@@ -12,23 +12,54 @@ class MapScreen extends StatefulWidget {
 
   MapScreen(
       {this.initialLocation =
-          const PlaceLocation(latitude: 37.442, longitude: -122.8),
+          const PlaceLocation(latitude: 37.442, longitude: -122.084),
       this.isSelecting = false});
   @override
   State<MapScreen> createState() => _MapScreenState();
 }
 
 class _MapScreenState extends State<MapScreen> {
+  var _pickedLoc = LatLng(0.0, 0.0);
+  void selectLoc(LatLng loc) {
+    setState(() {
+      _pickedLoc = loc;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("Select the location")),
+      appBar: AppBar(title: Text("Select the location"), actions: [
+        if (widget.isSelecting)
+          IconButton(
+              onPressed: _pickedLoc.latitude == 0.0 && _pickedLoc.longitude == 0
+                  ? null
+                  : () {
+                      Navigator.of(context).pop(_pickedLoc);
+                    },
+              icon: const Icon(Icons.check))
+      ]),
       body: GoogleMap(
-          initialCameraPosition: CameraPosition(
-              target: LatLng(widget.initialLocation.latitude,
-                  widget.initialLocation.longitude),
-                  zoom: 20,
-                  )),
+        initialCameraPosition: CameraPosition(
+          target: LatLng(widget.initialLocation.latitude,
+              widget.initialLocation.longitude),
+          zoom: 20,
+        ),
+        onTap: widget.isSelecting ? selectLoc : null,
+        markers: _pickedLoc.latitude == 0.0 &&
+                _pickedLoc.longitude == 0.0 &&
+                widget.isSelecting
+            ? {}
+            : {
+                Marker(
+                    markerId: const MarkerId('m1'),
+                    position: (_pickedLoc.latitude == 0.0 &&
+                            _pickedLoc.longitude == 0.0)
+                        ? LatLng(widget.initialLocation.latitude,
+                            widget.initialLocation.longitude)
+                        : _pickedLoc),
+              },
+      ),
     );
   }
 }
